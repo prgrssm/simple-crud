@@ -48,6 +48,11 @@ abstract class Controller extends BaseController
     protected $model = null;
 
     /**
+     * @var string|null
+     */
+    protected $modelClass = null;
+
+    /**
      * @var array
      *
      * List of selected fields form DB
@@ -68,13 +73,15 @@ abstract class Controller extends BaseController
 
     public function __construct(ModelFormDataSetter $dataSetter)
     {
-        parent::__construct();
-
         if (!$this->routePrefix) {
             throw new LogicException('Route prefix is not defined!');
         }
 
         $this->modelDataSetter = $dataSetter;
+
+        if ($this->modelClass && class_exists($this->modelClass)) {
+            $this->model = new $this->modelClass;
+        }
     }
 
     /**
