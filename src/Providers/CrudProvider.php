@@ -33,25 +33,13 @@ class CrudProvider extends ServiceProvider
     private $crudRoutesBinder;
 
     /**
-     * Create a new service provider instance.
-     *
-     * @param \Illuminate\Contracts\Foundation\Application $app
-     *
-     * @return void
+     * @var ModelFormDataSetter
      */
-    public function __construct($app)
-    {
-        parent::__construct($app);
-
-        $this->form = new Form(config('simple_crud.form.banned_attributes'));
-        $this->crudRoutesBinder = $app->make(CrudRoutesBinder::class);
-    }
+    private $modelFormDataSetter;
 
     public function boot()
     {
         $this->loadViewsFrom(__DIR__ . '/../../resources/views', 'simple_crud');
-
-        View::share('form', $this->form);
 
         $configPath = __DIR__ . '/../../config/simple_crud.php';
 
@@ -60,11 +48,26 @@ class CrudProvider extends ServiceProvider
         } else {
             $publishPath = base_path('config/simple_crud.php');
         }
-        $this->publishes([$configPath => $publishPath], 'config');
+
+        $this->publishes([
+            $configPath => $publishPath,
+            __DIR__ . '/../../resources/views' => resource_path('views/vendor/simple_crud')
+        ]);
     }
 
     public function register()
     {
+        $this->mergeConfigFrom(
+            __DIR__ . '/../../config/simple_crud.php', 'simple_crud'
+        );
+
+        $this->crudRoutesBinder = $this->app->make(CrudRoutesBinder::class);
+        $this->form = new Form(config('simple_crud.form.banned_attributes'));
+        $this->modelFormDataSetter = new  ModelFormDataSetter(
+            config('simple_crud.form_data_setter.remove_spaces_keys'),
+            config('simple_crud.form_data_setter.ignore_keys')
+        );
+
         $this->app->bind('crud_routes_binder', function () {
             return $this->crudRoutesBinder;
         });
@@ -74,10 +77,9 @@ class CrudProvider extends ServiceProvider
         });
 
         $this->app->bind(ModelFormDataSetter::class, function () {
-            return new ModelFormDataSetter(
-                config('simple_crud.form_data_setter.remove_spaces_keys'),
-                config('simple_crud.form_data_setter.ignore_keys')
-            );
+            $this->modelFormDataSetter;
         });
+
+        View::share('form', $this->app->make(Form::class));
     }
 }

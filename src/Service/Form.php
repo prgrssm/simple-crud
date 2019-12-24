@@ -51,34 +51,34 @@ class Form
 
         switch ($type) {
             case 'text':
-                $data = view('simple_crud.bootstrap_forms.text_type', $viewData);
+                $data = view('simple_crud::bootstrap_forms.text_type', $viewData);
                 break;
             case 'number':
-                $data = view('simple_crud.bootstrap_forms.number_type', $viewData);
+                $data = view('simple_crud::bootstrap_forms.number_type', $viewData);
                 break;
             case 'checkbox':
                 $viewData['value'] = $viewData['attributes']['value'];
                 unset($viewData['attributes']['value']);
 
-                $data = view('simple_crud.bootstrap_forms.checkbox-type', $viewData);
+                $data = view('simple_crud::bootstrap_forms.checkbox-type', $viewData);
                 break;
             case 'select':
                 $viewData['value'] = $viewData['attributes']['value'];
                 unset($viewData['attributes']['value']);
 
-                $data = view('simple_crud.bootstrap_forms.select_type', $viewData);
+                $data = view('simple_crud::bootstrap_forms.select_type', $viewData);
                 break;
             case 'textarea':
                 $viewData['value'] = $viewData['attributes']['value'];
                 unset($viewData['attributes']['value']);
 
-                $data = view('simple_crud.bootstrap_forms.textarea_type', $viewData);
+                $data = view('simple_crud::bootstrap_forms.textarea_type', $viewData);
                 break;
             case 'ckeditor':
                 $viewData['value'] = $viewData['attributes']['value'];
                 unset($viewData['attributes']['value']);
 
-                $data = view('simple_crud.bootstrap_forms.ckeditor_type', $viewData);
+                $data = view('simple_crud::bootstrap_forms.ckeditor_type', $viewData);
                 break;
         }
 
