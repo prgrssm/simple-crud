@@ -22,7 +22,7 @@ use Symfony\Component\Routing\Exception\RouteNotFoundException;
  * Class Controller
  * @package SimpleCrud\Controllers
  */
-abstract class Controller extends BaseController
+abstract class CrudController extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
