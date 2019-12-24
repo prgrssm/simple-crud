@@ -23,7 +23,10 @@
         "laravel": {
             "providers": [
                 "SimpleCrud\\Providers\\CrudProvider"
-            ]
+            ],
+            "aliases": {
+                "CrudRoutes": "SimpleCrud\\Facade\\CrudRoutesBinderFacade"
+            }
         }
     },
     "autoload": {
