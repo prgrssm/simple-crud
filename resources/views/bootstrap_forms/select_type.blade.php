@@ -1,6 +1,8 @@
 <div class="form-group">
   <label class="control-label">{{$label}} @if($required)<strong style="color: #f71c1c">*</strong>@endif</label>
-  <select name="id_type" class="form-control">
+  <select
+    name="{{$name}}"
+    class="form-control">
     @if(!$required)
       <option value="">Не задано</option>
     @endif
