@@ -10,7 +10,7 @@ class Form
      * @var array
      */
     private $bannedAttributes;
-
+    
     /**
      * Form constructor.
      *
@@ -20,23 +20,28 @@ class Form
     {
         $this->bannedAttributes = $bannedAttributes;
     }
-
+    
     public function renderFiled(Model $item, string $type, string $valueKey, array $config)
     {
         $data = '';
-
+        $prefix = '';
+        
+        if (!empty($config['prefix']) && is_string($config['prefix'])) {
+            $prefix = $config['prefix'];
+        }
+        
         $viewData = [
-            'name' => $valueKey,
+            'name' => "$prefix$valueKey",
             'required' => false,
             'attributes' => []
         ];
-
+        
         $attributes = [
             'value' => $item->$valueKey ?? null,
         ];
-
+        
         $viewData = $config + $viewData;
-
+        
         if (isset($config['attributes'])) {
             $viewData['attributes'] = array_filter($config['attributes'] + $attributes, function ($key) {
                 return !in_array($key, $this->bannedAttributes);
@@ -44,11 +49,11 @@ class Form
         } else {
             $viewData['attributes'] = $attributes;
         }
-
+        
         if (isset($config['required'])) {
             $viewData['required'] = (bool)$config['required'];
         }
-
+        
         switch ($type) {
             case 'text':
                 $data = view('simple_crud::bootstrap_forms.text_type', $viewData);
@@ -59,29 +64,29 @@ class Form
             case 'checkbox':
                 $viewData['value'] = $viewData['attributes']['value'];
                 unset($viewData['attributes']['value']);
-
+                
                 $data = view('simple_crud::bootstrap_forms.checkbox-type', $viewData);
                 break;
             case 'select':
                 $viewData['value'] = $viewData['attributes']['value'];
                 unset($viewData['attributes']['value']);
-
+                
                 $data = view('simple_crud::bootstrap_forms.select_type', $viewData);
                 break;
             case 'textarea':
                 $viewData['value'] = $viewData['attributes']['value'];
                 unset($viewData['attributes']['value']);
-
+                
                 $data = view('simple_crud::bootstrap_forms.textarea_type', $viewData);
                 break;
             case 'ckeditor':
                 $viewData['value'] = $viewData['attributes']['value'];
                 unset($viewData['attributes']['value']);
-
+                
                 $data = view('simple_crud::bootstrap_forms.ckeditor_type', $viewData);
                 break;
         }
-
+        
         return $data;
     }
 }
