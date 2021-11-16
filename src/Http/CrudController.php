@@ -1,6 +1,6 @@
 <?php
 
-namespace SimpleCrud\Controllers;
+namespace SimpleCrud\Http;
 
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
